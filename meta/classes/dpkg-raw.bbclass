@@ -31,9 +31,9 @@ do_deb_package_prepare() {
 	__EOF__
 	if [ ${DEBIAN_DEPENDS} != "" ]
 	then
+		DEBIAN_DEPS="$(for i in ${DEBIAN_DEPENDS};do echo $i,;done|tr '\n' ' '|sed 's/, *$//')"
 		echo -n Depends: >> ${D}/DEBIAN/control
-		echo ${DEBIAN_DEPENDS} | tr '[:blank:]' ',' >> \
-			${D}/DEBIAN/control
+		echo " ${DEBIAN_DEPS}" >> ${D}/DEBIAN/control
 	fi
 	for t in pre post
 	do
