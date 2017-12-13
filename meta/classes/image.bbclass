@@ -72,11 +72,19 @@ do_populate[stamp-extra-info] = "${DISTRO}-${MACHINE}"
 do_populate() {
     if [ -n "${IMAGE_INSTALL}" ]; then
         for p in ${IMAGE_INSTALL}; do
+            PACKAGE="$(find ${DEPLOY_DIR_DEB} -iname ${p}'_*.deb' | sort | tail -1)"
+            if [ -z "${PACKAGE}" ]; then
+                echo "Could not find ${p} in ${DEPLOY_DIR_DEB}" >&2
+                echo "Current content of ${DEPLOY_DIR_DEB}:" >&2
+                ls -al ${DEPLOY_DIR_DEB} >&2
+                exit -1
+            fi
+            echo "Adding \"$PACKAGE\" to repo"
             call_reprepro -b ${DEPLOY_DIR_APT}/${DISTRO} \
                           --dbdir ${DEPLOY_DIR_DB}/${DISTRO} \
                           -C main \
                           includedeb ${DEBDISTRONAME} \
-                          ${DEPLOY_DIR_DEB}/${p}_*.deb
+                          "$PACKAGE"
         done
     fi
 }
