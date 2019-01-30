@@ -21,10 +21,8 @@ inherit dpkg
 
 do_prepare_build() {
     cp -r ${WORKDIR}/debian ${S}/
-    sed -i -e 's/@PN@/${PN}/g' -e 's/@PV@/${PV}/g' \
-           -e 's/@KERNEL_NAME@/${KERNEL_NAME}/g' \
-           -e 's/@DESCRIPTION@/${DESCRIPTION}/g' \
-        ${S}/debian/changelog ${S}/debian/control
+    transform_template "${S}/debian/changelog.tmpl" "${S}/debian/changelog"
+    transform_template "${S}/debian/control.tmpl" "${S}/debian/control"
 
     for module in "${AUTOLOAD}"; do
         echo "echo $module >> /etc/modules" >> ${S}/debian/postinst
@@ -43,5 +41,4 @@ dpkg_runbuild_prepend() {
         export KDIR=$(dpkg -L --root=${BUILDCHROOT_DIR} ${KERNEL_DEP} | \
                       grep "/lib/modules/.*/build")
     fi
-    export PN=${PN}
 }

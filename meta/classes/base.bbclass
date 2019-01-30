@@ -20,6 +20,16 @@
 
 THISDIR = "${@os.path.dirname(d.getVar('FILE', True))}"
 
+# Exported variable to be availble for template replacing
+export PN
+export PV
+export DESCRIPTION
+export HOMEPAGE
+export MAINTAINER
+export KERNEL_NAME
+export MACHINE
+export DISTRO_ARCH
+
 die() {
 	bbfatal "$*"
 }
@@ -175,4 +185,24 @@ python do_cleanall() {
         fetcher.clean()
     except bb.fetch2.BBFetchException as e:
         bb.fatal(str(e))
+}
+
+transform_template() {
+    IN="$1"
+    OUT="$2"
+    shift 2
+    WHITELIST="$*"
+
+    if [ -e "$IN" ]; then
+        if [ -n "$WHITELIST" ]; then
+            FORMAT="$(
+                for i in $WHITELIST; do
+                    printf "\${%s} " "$i"
+                done
+            )"
+            envsubst "$FORMAT" < "$IN" > "$OUT"
+        else
+            envsubst < "$IN" > "$OUT"
+        fi
+    fi
 }
