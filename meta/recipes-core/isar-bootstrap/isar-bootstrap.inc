@@ -27,6 +27,7 @@ APTKEYRING = "${WORKDIR}/apt-keyring.gpg"
 DEBOOTSTRAP_KEYRING = ""
 DEPLOY_ISAR_BOOTSTRAP ?= ""
 DISTRO_BOOTSTRAP_BASE_PACKAGES = "locales"
+HOST_DISTRO_APT_SOURCES += "conf/distro/${HOST_DISTRO}.list"
 
 DISTRO_APT_PREMIRRORS ?= "${@ "http://ftp\.(\S+\.)?debian.org  file:///${REPO_BASE_DIR} \n" if bb.utils.to_boolean(d.getVar('ISAR_USE_CACHED_BASE_REPO')) else "" }"
 
