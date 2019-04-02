@@ -6,6 +6,7 @@
 DESCRIPTION = "Isar development filesystem for host"
 
 require buildchroot.inc
+PF = "${PN}-${HOST_DISTRO}-${HOST_ARCH}-${DISTRO_ARCH}"
 
 BUILDCHROOT_PREINSTALL ?= "make \
                            debhelper \

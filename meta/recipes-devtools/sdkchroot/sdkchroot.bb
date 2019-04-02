@@ -14,6 +14,7 @@ SRC_URI = " \
 PV = "0.1"
 
 inherit isar-bootstrap-helper
+PF = "${PN}-${HOST_DISTRO}-${HOST_ARCH}-${DISTRO_ARCH}"
 
 SDKCHROOT_PREINSTALL := "debhelper \
                            autotools-dev \
@@ -25,11 +26,9 @@ SDKCHROOT_PREINSTALL := "debhelper \
                            devscripts \
                            equivs"
 
-WORKDIR = "${TMPDIR}/work/${DISTRO}-${DISTRO_ARCH}/${PN}-${HOST_DISTRO}-${HOST_ARCH}"
 S = "${WORKDIR}/rootfs"
 
 do_build[dirs] = "${DEPLOY_DIR_IMAGE}"
-do_build[stamp-extra-info] = "${HOST_DISTRO}-${HOST_ARCH}"
 do_build[root_cleandirs] = "${S} \
                             ${S}/isar-apt"
 
