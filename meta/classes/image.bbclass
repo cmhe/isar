@@ -105,22 +105,6 @@ python set_image_size () {
     d.setVarFlag('ROOTFS_SIZE', 'export', '1')
 }
 
-ROOTFS_CONFIGURE_COMMAND += "image_configure_fstab"
-image_configure_fstab[weight] = "2"
-image_configure_fstab() {
-    sudo tee '${IMAGE_ROOTFS}/etc/fstab' << EOF
-# Begin /etc/fstab
-/dev/root	/		auto		defaults		0	0
-proc		/proc		proc		nosuid,noexec,nodev	0	0
-sysfs		/sys		sysfs		nosuid,noexec,nodev	0	0
-devpts		/dev/pts	devpts		gid=5,mode=620		0	0
-tmpfs		/run		tmpfs		defaults		0	0
-devtmpfs	/dev		devtmpfs	mode=0755,nosuid	0	0
-
-# End /etc/fstab
-EOF
-}
-
 do_copy_boot_files[dirs] = "${DEPLOY_DIR_IMAGE}"
 do_copy_boot_files() {
     kernel="$(realpath -q '${IMAGE_ROOTFS}/vmlinuz')"
